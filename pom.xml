@@ -1,0 +1,55 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>me.alexander.datbot</groupId>
+  <artifactId>datdiscordbot</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  
+  <repositories>
+  
+  	<repository>
+	  <id>javacord-repo</id>
+	  <url>http://repo.bastian-oppermann.de</url>
+	</repository>
+	
+	<repository>
+	    <id>central</id>
+	    <name>bintray</name>
+	    <url>http://jcenter.bintray.com</url>
+	  </repository>
+  
+  </repositories>
+  
+  <dependencies>
+  
+  	<dependency>
+	  <groupId>de.btobastian.javacord</groupId>
+	  <artifactId>javacord</artifactId>
+	  <version>2.0.14</version>
+	   <!-- This will use the shaded javacord which contains all required dependencies -->
+	  <classifier>shaded</classifier>
+	</dependency>
+	<!-- A SLF4J comaptible logging framework. I would recommend to use logback -->
+	<dependency>
+	  <groupId>ch.qos.logback</groupId>
+	  <artifactId>logback-classic</artifactId>
+	  <version>1.1.3</version>
+	</dependency>
+	
+	<dependency>
+    <groupId>com.sedmelluq</groupId>
+    <artifactId>lavaplayer</artifactId>
+    <version>1.2.34</version>
+  </dependency>
+  
+  </dependencies>
+  
+  <build>
+  	<plugins>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-shade-plugin</artifactId>
+  			<version>2.3</version>
+  		</plugin>
+  	</plugins>
+  </build>
+</project>
