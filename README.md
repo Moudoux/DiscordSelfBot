@@ -1,6 +1,18 @@
 # DiscordSelfBot
 A Java Discord selfbot that allows custom commands and rich messages (Embeds)
 
+### Retrieving your access token
+
+In browser or desktop Discord, type `Ctrl-Shift-I`. Go to the Application section, and and go to Storage > LocalStorage > discordapp.com. Find the token row, and your token will be the value in quotes. 
+
+⚠ Do not share this token with anyone ⚠ This token provides complete access to your Discord account, so never share it!
+
+### Installing and running
+
+First download the source and compile it into a .jar file, set the main class to `me.alexander.discordbot.Main`
+
+Now open a command prompt/terminal window and type `java -jar SelfBot.jar <Your access token>`
+
 ### Commands
 
 ```
