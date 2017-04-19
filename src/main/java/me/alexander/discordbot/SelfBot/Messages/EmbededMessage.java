@@ -17,9 +17,13 @@ import me.alexander.discordbot.SelfBot.SelfBot;
 
 public class EmbededMessage {
 
+	/**
+	 * Random to get random RGB values for the color
+	 */
 	private static Random rand = new Random();
 
 	/**
+	 * Builds an embedded message
 	 * 
 	 * @param title
 	 * @param description
@@ -27,7 +31,7 @@ public class EmbededMessage {
 	 * @param image
 	 * @param thumbnail
 	 * @param color
-	 * @return
+	 * @return EmbedBuilder
 	 */
 	public static EmbedBuilder getEmbeddedMessage(final String title, final String description, final String footer,
 			final String image, final String thumbnail, final Color color) {
@@ -41,6 +45,12 @@ public class EmbededMessage {
 		return emb;
 	}
 
+	/**
+	 * Returns an array with all URLs in a given string
+	 * 
+	 * @param text
+	 * @return List<String>
+	 */
 	public static List<String> extractUrls(final String text) {
 		final List<String> containedUrls = new ArrayList<String>();
 		final String urlRegex = "((https?|ftp|gopher|telnet|file):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
@@ -52,6 +62,13 @@ public class EmbededMessage {
 		return containedUrls;
 	}
 
+	/**
+	 * Get's a user from their id or mentiontag
+	 * 
+	 * @param tag
+	 * @param bot
+	 * @return User
+	 */
 	public static User getUser(final String tag, final SelfBot bot) {
 		for (final Server c : bot.getAPI().getServers()) {
 			for (final User u : c.getMembers()) {
@@ -63,6 +80,12 @@ public class EmbededMessage {
 		return null;
 	}
 
+	/**
+	 * Sends an embedded message about a given user
+	 * 
+	 * @param m
+	 * @param bot
+	 */
 	public static void userInfo(final Message m, final SelfBot bot) {
 		m.delete();
 
@@ -85,6 +108,12 @@ public class EmbededMessage {
 		m.reply("", emb);
 	}
 
+	/**
+	 * The /embed message interpreter
+	 * 
+	 * @param message
+	 * @param bot
+	 */
 	public static void embed(final Message message, final SelfBot bot) {
 		if (message.getContent().startsWith("/user")) {
 			EmbededMessage.userInfo(message, bot);
