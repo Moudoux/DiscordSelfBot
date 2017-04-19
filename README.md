@@ -11,6 +11,8 @@ In browser or desktop Discord, type `Ctrl-Shift-I`. Go to the Application sectio
 
 First download the source and compile it into a .jar file, set the main class to `me.alexander.discordbot.Main`
 
+You can also download a precompiled version [here](https://github.com/Moudoux/DiscordSelfBot/blob/master/SelfBot.jar).
+
 Now open a command prompt/terminal window and type `java -jar SelfBot.jar <Your access token>`
 
 ### Commands
