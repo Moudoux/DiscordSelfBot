@@ -59,7 +59,7 @@ public class EmbededMessage {
 		emb.setDescription(output);
 		emb.setThumbnail(user.getAvatarUrl().toString());
 		emb.setFooter(
-				"Deft's Bot | Message sent "
+				m.getAuthor().getName() + "'s Bot | Message sent "
 						+ new SimpleDateFormat("MM/dd HH:mm:ss").format(Calendar.getInstance().getTime()),
 				"https://avatars1.githubusercontent.com/u/6422482?v=3&s=400");
 		m.reply("", emb);
