@@ -1,5 +1,5 @@
 # DiscordSelfBot
-A Java Discord selfbot that allows custom commands and rich messages (Embeds)
+A Java Discord selfbot that allows custom commands and rich messages (Embeds) based on [BtoBastian's JavaCord library](https://github.com/BtoBastian/Javacord).
 
 ### Retrieving your access token
 
