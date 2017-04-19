@@ -15,27 +15,62 @@ import de.btobastian.javacord.listener.server.ServerMemberBanListener;
 import de.btobastian.javacord.listener.server.ServerMemberRemoveListener;
 import de.btobastian.javacord.listener.user.UserRoleAddListener;
 import de.btobastian.javacord.listener.user.UserRoleRemoveListener;
+import me.alexander.discordbot.Logger.LogType;
+import me.alexander.discordbot.Main;
 
+/**
+ * The SelfBot bot
+ *
+ */
 public class SelfBot {
 
+	/**
+	 * The current SelfBot instance
+	 */
 	private final SelfBot bot = this;
+
+	/**
+	 * Token used
+	 */
 	private final String token;
+
+	/**
+	 * The DiscordAPI instance
+	 */
 	private DiscordAPI api = null;
 
+	/**
+	 * SelfBot instance, provide the token to login
+	 * 
+	 * @param token
+	 */
 	public SelfBot(final String token) {
 		this.token = token;
 	}
 
+	/**
+	 * Disconnects the bot and will shutdown the bot
+	 * 
+	 */
 	public void disconnect() {
 		api.disconnect();
 		System.exit(0);
 	}
 
+	/**
+	 * Get's the current DiscordAPI instance
+	 * 
+	 * @return DiscordAPI
+	 */
 	public DiscordAPI getAPI() {
 		return api;
 	}
 
+	/**
+	 * Starts the bot, sets up all the hooks
+	 */
 	public void setup() {
+		// Get the API, false = This is not a bot account
 		api = Javacord.getApi(token, false);
 		api.connect(new FutureCallback<DiscordAPI>() {
 			@Override
@@ -46,8 +81,7 @@ public class SelfBot {
 						new Thread() {
 							@Override
 							public void run() {
-								final IMessageSelfBot imessage = new IMessageSelfBot(api, message, bot);
-								imessage.execute();
+								new IMessageSelfBot(message, bot).execute();
 							}
 						}.start();
 					}
@@ -58,8 +92,7 @@ public class SelfBot {
 						new Thread() {
 							@Override
 							public void run() {
-								final IMessageSelfBot imessage = new IMessageSelfBot(api, message, bot);
-								imessage.execute();
+								new IMessageSelfBot(message, bot).execute();
 							}
 						}.start();
 					}
@@ -70,7 +103,7 @@ public class SelfBot {
 						new Thread() {
 							@Override
 							public void run() {
-
+								// Hook ?
 							}
 						}.start();
 					}
@@ -123,8 +156,11 @@ public class SelfBot {
 			}
 
 			@Override
+			/**
+			 * Called when the bot is not able to connect to Discord
+			 */
 			public void onFailure(final Throwable t) {
-				System.out.println("Failed to connect");
+				Main.getLogger().log("Failed to connect", LogType.CRITICAL);
 				t.printStackTrace();
 			}
 		});
