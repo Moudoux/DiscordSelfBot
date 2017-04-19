@@ -19,6 +19,28 @@ public class EmbededMessage {
 
 	private static Random rand = new Random();
 
+	/**
+	 * 
+	 * @param title
+	 * @param description
+	 * @param footer
+	 * @param image
+	 * @param thumbnail
+	 * @param color
+	 * @return
+	 */
+	public static EmbedBuilder getEmbeddedMessage(final String title, final String description, final String footer,
+			final String image, final String thumbnail, final Color color) {
+		final EmbedBuilder emb = new EmbedBuilder();
+		emb.setTitle(title);
+		emb.setDescription(description);
+		emb.setFooter(footer);
+		emb.setImage(image);
+		emb.setThumbnail(thumbnail);
+		emb.setColor(color);
+		return emb;
+	}
+
 	public static List<String> extractUrls(final String text) {
 		final List<String> containedUrls = new ArrayList<String>();
 		final String urlRegex = "((https?|ftp|gopher|telnet|file):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
@@ -43,25 +65,23 @@ public class EmbededMessage {
 
 	public static void userInfo(final Message m, final SelfBot bot) {
 		m.delete();
-		final EmbedBuilder emb = new EmbedBuilder();
-		emb.setColor(Color.cyan);
+
 		User user = EmbededMessage.getUser(m.getContent().replace("/user ", ""), bot);
 		if (user == null) {
 			user = bot.getAPI().getYourself();
 		}
+
 		String output = "Username\n" + user.getName();
 		output += "\n\nUser ID\n" + user.getId();
 		output += "\n\nMention Tag\n" + user.getMentionTag();
 		output += "\n\nAvatar\n" + user.getAvatarUrl();
 		output += "\n\nStatus\n" + user.getStatus().name() + "\n";
 
-		emb.setTitle("Profile of " + user.getName() + ":");
-		emb.setDescription(output);
-		emb.setThumbnail(user.getAvatarUrl().toString());
-		emb.setFooter(
+		final EmbedBuilder emb = getEmbeddedMessage("Profile of " + user.getName() + ":", output,
 				m.getAuthor().getName() + "'s Bot | Message sent "
 						+ new SimpleDateFormat("MM/dd HH:mm:ss").format(Calendar.getInstance().getTime()),
-				"https://avatars1.githubusercontent.com/u/6422482?v=3&s=400");
+				"", user.getAvatarUrl().toString(), Color.cyan);
+
 		m.reply("", emb);
 	}
 

@@ -18,11 +18,11 @@ import de.btobastian.javacord.listener.user.UserRoleRemoveListener;
 
 public class SelfBot {
 
-	private SelfBot bot = this;
+	private final SelfBot bot = this;
 	private final String token;
 	private DiscordAPI api = null;
 
-	public SelfBot(String token) {
+	public SelfBot(final String token) {
 		this.token = token;
 	}
 
@@ -39,14 +39,14 @@ public class SelfBot {
 		api = Javacord.getApi(token, false);
 		api.connect(new FutureCallback<DiscordAPI>() {
 			@Override
-			public void onSuccess(DiscordAPI api) {
+			public void onSuccess(final DiscordAPI api) {
 				api.registerListener(new MessageCreateListener() {
 					@Override
 					public void onMessageCreate(final DiscordAPI api, final Message message) {
 						new Thread() {
 							@Override
 							public void run() {
-								IMessageSelfBot imessage = new IMessageSelfBot(api, message, bot);
+								final IMessageSelfBot imessage = new IMessageSelfBot(api, message, bot);
 								imessage.execute();
 							}
 						}.start();
@@ -54,11 +54,11 @@ public class SelfBot {
 				});
 				api.registerListener(new MessageEditListener() {
 					@Override
-					public void onMessageEdit(final DiscordAPI api, final Message message, String oldContent) {
+					public void onMessageEdit(final DiscordAPI api, final Message message, final String oldContent) {
 						new Thread() {
 							@Override
 							public void run() {
-								IMessageSelfBot imessage = new IMessageSelfBot(api, message, bot);
+								final IMessageSelfBot imessage = new IMessageSelfBot(api, message, bot);
 								imessage.execute();
 							}
 						}.start();
@@ -123,7 +123,7 @@ public class SelfBot {
 			}
 
 			@Override
-			public void onFailure(Throwable t) {
+			public void onFailure(final Throwable t) {
 				System.out.println("Failed to connect");
 				t.printStackTrace();
 			}
