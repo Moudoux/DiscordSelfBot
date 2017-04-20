@@ -94,16 +94,22 @@ public class EmbededMessage {
 			user = bot.getAPI().getYourself();
 		}
 
-		String output = "Username\n" + user.getName();
-		output += "\n\nUser ID\n" + user.getId();
-		output += "\n\nMention Tag\n" + user.getMentionTag();
-		output += "\n\nAvatar\n" + user.getAvatarUrl();
-		output += "\n\nStatus\n" + user.getStatus().name() + "\n";
+		final EmbedBuilder emb = new EmbedBuilder();
 
-		final EmbedBuilder emb = getEmbeddedMessage("Profile of " + user.getName() + ":", output,
+		emb.addField("Username", user.getName(), true);
+		emb.addField("User ID", user.getId(), true);
+		emb.addField("Mention Tag", user.getMentionTag(), true);
+		emb.addField("Avatar", user.getAvatarUrl().toString(), true);
+		emb.addField("Status", user.getStatus().name(), true);
+
+		emb.setFooter(
 				m.getAuthor().getName() + "'s Bot | Message sent "
 						+ new SimpleDateFormat("MM/dd HH:mm:ss").format(Calendar.getInstance().getTime()),
-				"", user.getAvatarUrl().toString(), Color.cyan);
+				"https://avatars1.githubusercontent.com/u/6422482?v=3&s=400");
+
+		emb.setTitle("Profile of " + user.getName() + ":");
+		emb.setColor(Color.red);
+		emb.setThumbnail(user.getAvatarUrl().toString());
 
 		m.reply("", emb);
 	}
