@@ -28,10 +28,6 @@ public class Main {
 		}
 		Main.bot = new SelfBot(args[0]);
 		Main.bot.setup();
-		synchronized (Main.bot) {
-			Main.bot.wait();
-		}
-		System.exit(0);
 	}
 
 	/**

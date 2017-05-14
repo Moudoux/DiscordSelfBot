@@ -64,7 +64,7 @@ public class SelfBot {
 	 * Disconnects the bot and will shutdown the bot
 	 * 
 	 */
-	public synchronized void disconnect() {
+	public void disconnect() {
 		api.setAutoReconnect(false);
 		api.disconnect();
 		if (exitOnDisconnect) {
