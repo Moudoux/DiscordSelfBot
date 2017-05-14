@@ -19,17 +19,19 @@ public class Main {
 	 * Main function, provide your discord account token as a CLI argument
 	 * 
 	 * @param args
+	 * @throws InterruptedException
 	 */
-	public static void main(final String[] args) {
+	public static void main(final String[] args) throws InterruptedException {
 		if (args.length == 0) {
 			Main.logger.log("Please provide your Discord account token as a command line argument.", LogType.CRITICAL);
-			System.exit(0);
+			return;
 		}
 		Main.bot = new SelfBot(args[0]);
 		Main.bot.setup();
-		while (true) {
-			;
+		synchronized (Main.bot) {
+			Main.bot.wait();
 		}
+		System.exit(0);
 	}
 
 	/**

@@ -1,21 +1,16 @@
 package me.alexander.discordbot.SelfBot;
 
+import java.util.concurrent.ExecutionException;
+
 import com.google.common.util.concurrent.FutureCallback;
 
 import de.btobastian.javacord.DiscordAPI;
 import de.btobastian.javacord.Javacord;
-import de.btobastian.javacord.entities.Server;
-import de.btobastian.javacord.entities.User;
 import de.btobastian.javacord.entities.message.Message;
-import de.btobastian.javacord.entities.permissions.Role;
 import de.btobastian.javacord.listener.message.MessageCreateListener;
 import de.btobastian.javacord.listener.message.MessageEditListener;
-import de.btobastian.javacord.listener.server.ServerMemberAddListener;
-import de.btobastian.javacord.listener.server.ServerMemberBanListener;
-import de.btobastian.javacord.listener.server.ServerMemberRemoveListener;
-import de.btobastian.javacord.listener.user.UserRoleAddListener;
-import de.btobastian.javacord.listener.user.UserRoleRemoveListener;
 import me.alexander.discordbot.Logger.LogType;
+import me.alexander.discordbot.Logger;
 import me.alexander.discordbot.Main;
 
 /**
@@ -35,6 +30,11 @@ public class SelfBot {
 	private final String token;
 
 	/**
+	 * Call System.exit(0); on disconnect. Default: true
+	 */
+	private final boolean exitOnDisconnect;
+
+	/**
 	 * The DiscordAPI instance
 	 */
 	private DiscordAPI api = null;
@@ -45,16 +45,31 @@ public class SelfBot {
 	 * @param token
 	 */
 	public SelfBot(final String token) {
+		this(token, true);
+	}
+
+	/**
+	 * SelfBot instance, provide the token to login and whether or not to exit
+	 * on bot disconnect
+	 * 
+	 * @param token
+	 * @param exitOnDisconnect
+	 */
+	public SelfBot(final String token, final boolean exitOnDisconnect) {
 		this.token = token;
+		this.exitOnDisconnect = exitOnDisconnect;
 	}
 
 	/**
 	 * Disconnects the bot and will shutdown the bot
 	 * 
 	 */
-	public void disconnect() {
+	public synchronized void disconnect() {
+		api.setAutoReconnect(false);
 		api.disconnect();
-		System.exit(0);
+		if (exitOnDisconnect) {
+			System.exit(0);
+		}
 	}
 
 	/**
@@ -78,78 +93,25 @@ public class SelfBot {
 				api.registerListener(new MessageCreateListener() {
 					@Override
 					public void onMessageCreate(final DiscordAPI api, final Message message) {
-						new Thread() {
-							@Override
-							public void run() {
-								new IMessageSelfBot(message, bot).execute();
+						api.getThreadPool().getExecutorService().submit(() -> {
+							try {
+								IMessageSelfBot.execute(message, bot);
+							} catch (InterruptedException | ExecutionException e) {
+								Main.getLogger().log(e.getMessage(), Logger.LogType.WARN);
 							}
-						}.start();
+						});
 					}
 				});
 				api.registerListener(new MessageEditListener() {
 					@Override
 					public void onMessageEdit(final DiscordAPI api, final Message message, final String oldContent) {
-						new Thread() {
-							@Override
-							public void run() {
-								new IMessageSelfBot(message, bot).execute();
+						api.getThreadPool().getExecutorService().submit(() -> {
+							try {
+								IMessageSelfBot.execute(message, bot);
+							} catch (InterruptedException | ExecutionException e) {
+								Main.getLogger().log(e.getMessage(), Logger.LogType.WARN);
 							}
-						}.start();
-					}
-				});
-				api.registerListener(new ServerMemberAddListener() {
-					@Override
-					public void onServerMemberAdd(final DiscordAPI api, final User user, final Server server) {
-						new Thread() {
-							@Override
-							public void run() {
-								// Hook ?
-							}
-						}.start();
-					}
-				});
-				api.registerListener(new ServerMemberRemoveListener() {
-					@Override
-					public void onServerMemberRemove(final DiscordAPI api, final User user, final Server server) {
-						new Thread() {
-							@Override
-							public void run() {
-								// Hook ?
-							}
-						}.start();
-					}
-				});
-				api.registerListener(new ServerMemberBanListener() {
-					@Override
-					public void onServerMemberBan(final DiscordAPI api, final User user, final Server server) {
-						new Thread() {
-							@Override
-							public void run() {
-								// Hook ?
-							}
-						}.start();
-					}
-				});
-				api.registerListener(new UserRoleAddListener() {
-					@Override
-					public void onUserRoleAdd(final DiscordAPI api, final User user, final Role role) {
-						new Thread() {
-							@Override
-							public void run() {
-								// Hook ?
-							}
-						}.start();
-					}
-				});
-				api.registerListener(new UserRoleRemoveListener() {
-					@Override
-					public void onUserRoleRemove(final DiscordAPI api, final User user, final Role role) {
-						new Thread() {
-							@Override
-							public void run() {
-								// Hook ?
-							}
-						}.start();
+						});
 					}
 				});
 				api.setAutoReconnect(true);

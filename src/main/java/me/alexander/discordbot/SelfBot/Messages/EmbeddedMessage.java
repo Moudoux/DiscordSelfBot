@@ -15,7 +15,7 @@ import de.btobastian.javacord.entities.message.Message;
 import de.btobastian.javacord.entities.message.embed.EmbedBuilder;
 import me.alexander.discordbot.SelfBot.SelfBot;
 
-public class EmbededMessage {
+public class EmbeddedMessage {
 
 	/**
 	 * Random to get random RGB values for the color
@@ -89,7 +89,7 @@ public class EmbededMessage {
 	public static void userInfo(final Message m, final SelfBot bot) {
 		m.delete();
 
-		User user = EmbededMessage.getUser(m.getContent().replace("/user ", ""), bot);
+		User user = EmbeddedMessage.getUser(m.getContent().replace("/user ", ""), bot);
 		if (user == null) {
 			user = bot.getAPI().getYourself();
 		}
@@ -122,7 +122,7 @@ public class EmbededMessage {
 	 */
 	public static void embed(final Message message, final SelfBot bot) {
 		if (message.getContent().startsWith("/user")) {
-			EmbededMessage.userInfo(message, bot);
+			EmbeddedMessage.userInfo(message, bot);
 			return;
 		}
 		if (!message.getContent().startsWith("/embed")) {
@@ -134,15 +134,15 @@ public class EmbededMessage {
 
 		try {
 			final EmbedBuilder emb = new EmbedBuilder();
-			emb.setColor(new Color(EmbededMessage.rand.nextFloat(), EmbededMessage.rand.nextFloat(),
-					EmbededMessage.rand.nextFloat()).brighter());
+			emb.setColor(new Color(EmbeddedMessage.rand.nextFloat(), EmbeddedMessage.rand.nextFloat(),
+					EmbeddedMessage.rand.nextFloat()).brighter());
 
 			emb.setFooter(
 					message.getAuthor().getName() + "'s Bot | Message sent "
 							+ new SimpleDateFormat("MM/dd HH:mm:ss").format(Calendar.getInstance().getTime()),
 					"https://avatars1.githubusercontent.com/u/6422482?v=3&s=400");
 
-			for (final String url : EmbededMessage.extractUrls(msg)) {
+			for (final String url : EmbeddedMessage.extractUrls(msg)) {
 				if (url.endsWith(".png") || url.endsWith(".jpeg") || url.endsWith(".jpg")) {
 					emb.setImage(url);
 					msg = msg.replace(url, "");
