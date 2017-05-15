@@ -6,10 +6,7 @@ import java.util.concurrent.ExecutionException;
 import de.btobastian.javacord.entities.User;
 import de.btobastian.javacord.entities.message.Message;
 import de.btobastian.javacord.entities.message.embed.EmbedBuilder;
-import de.btobastian.javacord.entities.permissions.PermissionState;
 import de.btobastian.javacord.entities.permissions.PermissionType;
-import de.btobastian.javacord.entities.permissions.Permissions;
-import de.btobastian.javacord.entities.permissions.Role;
 import me.alexander.discordbot.SelfBot.Messages.AutoDeleteMessage;
 import me.alexander.discordbot.SelfBot.Messages.EmbeddedMessage;
 
@@ -45,21 +42,14 @@ public class ICommandSelfBot {
 				new AutoDeleteMessage("Invalid argument", 2, message.getChannelReceiver());
 				break;
 			}
-			User user = bot.getAPI().getUserById(args).get();
+			User user = Utils.getUser(args, message.getChannelReceiver().getServer(), bot);
 			if (user == null) {
 				new AutoDeleteMessage("User not found", 2, message.getChannelReceiver());
 				break;
 			}
 			// Make sure we have permission to ban in this discord server
-			boolean allowed = false;
-			for (Role r : bot.getAPI().getYourself().getRoles(message.getChannelReceiver().getServer())) {
-				Permissions p = r.getPermissions();
-				if (p.getState(PermissionType.BAN_MEMBERS).equals(PermissionState.ALLOWED)) {
-					allowed = true;
-					break;
-				}
-			}
-			if (!allowed) {
+			if (!Utils.hasPermission(bot.getAPI().getYourself(), message.getChannelReceiver().getServer(),
+					PermissionType.BAN_MEMBERS)) {
 				new AutoDeleteMessage("You are not authorized to ban", 2, message.getChannelReceiver());
 				break;
 			}
