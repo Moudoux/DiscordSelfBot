@@ -5,6 +5,8 @@ import java.util.Calendar;
 
 public class Logger {
 
+	public Logger() {}
+
 	/**
 	 * Get's the current time
 	 * 

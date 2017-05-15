@@ -17,6 +17,8 @@ import me.alexander.discordbot.SelfBot.SelfBot;
 
 public class EmbeddedMessage {
 
+	public EmbeddedMessage() {}
+
 	/**
 	 * Random to get random RGB values for the color
 	 */
