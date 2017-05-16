@@ -11,15 +11,16 @@ public class IMessageSelfBot {
 	 */
 	private final static String commandPrefix = "/";
 
-	private IMessageSelfBot() {
-	}
+	private IMessageSelfBot() {}
 
 	/**
 	 * Executes the message processor
-	 * @throws ExecutionException 
-	 * @throws InterruptedException 
+	 * 
+	 * @throws ExecutionException
+	 * @throws InterruptedException
 	 */
-	public static void execute(final Message message, final SelfBot bot) throws InterruptedException, ExecutionException {
+	public static void execute(final Message message, final SelfBot bot)
+			throws InterruptedException, ExecutionException {
 		// Make sure the message is sent by the correct user
 		if (message.getAuthor().equals(bot.getAPI().getYourself())) {
 			// Handle command

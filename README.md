@@ -3,9 +3,9 @@ A Java Discord selfbot that allows custom commands and rich messages (Embeds) ba
 
 ### Retrieving your access token
 
-In browser or desktop Discord, type `Ctrl-Shift-I`. Go to the Application section, and and go to Storage > LocalStorage > discordapp.com. Find the token row, and your token will be the value in quotes. 
+In your browser or desktop Discord, press `Ctrl-Shift-I` or `⌘-Shift-I` on Mac. Go to the Application section, Click on Storage > LocalStorage > discordapp.com. Find the token row at the bottom, your token will be the value in quotes. 
 
-⚠ Do not share this token with anyone ⚠ This token provides complete access to your Discord account, so never share it!
+⚠ Do not share this token with anyone ⚠ This token provides complete access to your Discord account, never share it!
 
 ### Installing and running
 

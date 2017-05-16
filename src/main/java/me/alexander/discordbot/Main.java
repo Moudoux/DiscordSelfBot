@@ -6,6 +6,11 @@ import me.alexander.discordbot.SelfBot.SelfBot;
 public class Main {
 
 	/**
+	 * The version of this bot
+	 */
+	public static final String version = "0.4";
+
+	/**
 	 * SelfBot instance
 	 */
 	private static SelfBot bot;
@@ -26,6 +31,7 @@ public class Main {
 			Main.logger.log("Please provide your Discord account token as a command line argument.", LogType.CRITICAL);
 			return;
 		}
+		Main.logger.log("Starting SelfBot version " + version, LogType.INFO);
 		Main.bot = new SelfBot(args[0]);
 		Main.bot.setup();
 	}

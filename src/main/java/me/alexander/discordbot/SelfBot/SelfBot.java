@@ -9,8 +9,8 @@ import de.btobastian.javacord.Javacord;
 import de.btobastian.javacord.entities.message.Message;
 import de.btobastian.javacord.listener.message.MessageCreateListener;
 import de.btobastian.javacord.listener.message.MessageEditListener;
-import me.alexander.discordbot.Logger.LogType;
 import me.alexander.discordbot.Logger;
+import me.alexander.discordbot.Logger.LogType;
 import me.alexander.discordbot.Main;
 
 /**
