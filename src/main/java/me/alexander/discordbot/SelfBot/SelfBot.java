@@ -2,6 +2,9 @@ package me.alexander.discordbot.SelfBot;
 
 import java.util.concurrent.ExecutionException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.util.concurrent.FutureCallback;
 
 import de.btobastian.javacord.DiscordAPI;
@@ -9,15 +12,18 @@ import de.btobastian.javacord.Javacord;
 import de.btobastian.javacord.entities.message.Message;
 import de.btobastian.javacord.listener.message.MessageCreateListener;
 import de.btobastian.javacord.listener.message.MessageEditListener;
-import me.alexander.discordbot.Logger;
-import me.alexander.discordbot.Logger.LogType;
-import me.alexander.discordbot.Main;
+import me.alexander.discordbot.SelfBot.Messages.IMessageSelfBot;
 
 /**
  * The SelfBot bot
  *
  */
 public class SelfBot {
+
+	/**
+	 * The current logger for this SelfBot
+	 */
+	private final Logger logger;
 
 	/**
 	 * The current SelfBot instance
@@ -58,6 +64,7 @@ public class SelfBot {
 	public SelfBot(final String token, final boolean exitOnDisconnect) {
 		this.token = token;
 		this.exitOnDisconnect = exitOnDisconnect;
+		this.logger = LoggerFactory.getLogger(SelfBot.class);
 	}
 
 	/**
@@ -97,7 +104,7 @@ public class SelfBot {
 							try {
 								IMessageSelfBot.execute(message, bot);
 							} catch (InterruptedException | ExecutionException e) {
-								Main.getLogger().log(e.getMessage(), Logger.LogType.WARN);
+								logger.debug(e.getMessage());
 							}
 						});
 					}
@@ -109,7 +116,7 @@ public class SelfBot {
 							try {
 								IMessageSelfBot.execute(message, bot);
 							} catch (InterruptedException | ExecutionException e) {
-								Main.getLogger().log(e.getMessage(), Logger.LogType.WARN);
+								logger.debug(e.getMessage());
 							}
 						});
 					}
@@ -122,10 +129,19 @@ public class SelfBot {
 			 * Called when the bot is not able to connect to Discord
 			 */
 			public void onFailure(final Throwable t) {
-				Main.getLogger().log("Failed to connect", LogType.CRITICAL);
+				logger.debug("Failed to connect");
 				t.printStackTrace();
 			}
 		});
+	}
+	
+	/**
+	 * Returns the logger for this SelfBot
+	 * 
+	 * @return logger
+	 */
+	public Logger getLogger() {
+		return logger;
 	}
 
 }

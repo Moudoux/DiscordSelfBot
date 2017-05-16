@@ -1,6 +1,8 @@
 package me.alexander.discordbot;
 
-import me.alexander.discordbot.Logger.LogType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import me.alexander.discordbot.SelfBot.SelfBot;
 
 public class Main {
@@ -18,7 +20,7 @@ public class Main {
 	/**
 	 * Logger instance
 	 */
-	private static Logger logger = new Logger();
+	private static Logger logger = LoggerFactory.getLogger(Main.class);
 
 	/**
 	 * Main function, provide your discord account token as a CLI argument
@@ -28,10 +30,10 @@ public class Main {
 	 */
 	public static void main(final String[] args) throws InterruptedException {
 		if (args.length == 0) {
-			Main.logger.log("Please provide your Discord account token as a command line argument.", LogType.CRITICAL);
+			Main.logger.error("Please provide your Discord account token as a command line argument.");
 			return;
 		}
-		Main.logger.log("Starting SelfBot version " + version, LogType.INFO);
+		Main.logger.info("Starting SelfBot version " + version);
 		Main.bot = new SelfBot(args[0]);
 		Main.bot.setup();
 	}
