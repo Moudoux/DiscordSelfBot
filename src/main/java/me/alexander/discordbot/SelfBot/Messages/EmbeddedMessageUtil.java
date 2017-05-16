@@ -1,23 +1,24 @@
 package me.alexander.discordbot.SelfBot.Messages;
 
+import static me.alexander.discordbot.SelfBot.Utils.extractUrls;
+import static me.alexander.discordbot.SelfBot.Utils.getUser;
+
 import java.awt.Color;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.concurrent.Future;
 
-import de.btobastian.javacord.entities.Server;
+import de.btobastian.javacord.entities.Channel;
 import de.btobastian.javacord.entities.User;
 import de.btobastian.javacord.entities.message.Message;
 import de.btobastian.javacord.entities.message.embed.EmbedBuilder;
 import me.alexander.discordbot.SelfBot.SelfBot;
 
-public class EmbeddedMessage {
+public class EmbeddedMessageUtil {
 
-	public EmbeddedMessage() {}
+	private EmbeddedMessageUtil() {
+	}
 
 	/**
 	 * Random to get random RGB values for the color
@@ -48,50 +49,15 @@ public class EmbeddedMessage {
 	}
 
 	/**
-	 * Returns an array with all URLs in a given string
-	 * 
-	 * @param text
-	 * @return List<String>
-	 */
-	public static List<String> extractUrls(final String text) {
-		final List<String> containedUrls = new ArrayList<String>();
-		final String urlRegex = "((https?|ftp|gopher|telnet|file):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
-		final Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
-		final Matcher urlMatcher = pattern.matcher(text);
-		while (urlMatcher.find()) {
-			containedUrls.add(text.substring(urlMatcher.start(0), urlMatcher.end(0)));
-		}
-		return containedUrls;
-	}
-
-	/**
-	 * Get's a user from their id or mentiontag
-	 * 
-	 * @param tag
-	 * @param bot
-	 * @return User
-	 */
-	public static User getUser(final String tag, final SelfBot bot) {
-		for (final Server c : bot.getAPI().getServers()) {
-			for (final User u : c.getMembers()) {
-				if (u.getMentionTag().equals(tag) || u.getId().equals(tag)) {
-					return u;
-				}
-			}
-		}
-		return null;
-	}
-
-	/**
 	 * Sends an embedded message about a given user
 	 * 
 	 * @param m
 	 * @param bot
 	 */
-	public static void userInfo(final Message m, final SelfBot bot) {
+	public static Future<Message> userInfo(final Message m, final SelfBot bot) {
 		m.delete();
-
-		User user = EmbeddedMessage.getUser(m.getContent().replace("/user ", ""), bot);
+		
+		User user = getUser(m.getContent().replace("/user ", ""), bot);
 		if (user == null) {
 			user = bot.getAPI().getYourself();
 		}
@@ -113,7 +79,7 @@ public class EmbeddedMessage {
 		emb.setColor(Color.red);
 		emb.setThumbnail(user.getAvatarUrl().toString());
 
-		m.reply("", emb);
+		return m.reply("", emb);
 	}
 
 	/**
@@ -122,29 +88,32 @@ public class EmbeddedMessage {
 	 * @param message
 	 * @param bot
 	 */
-	public static void embed(final Message message, final SelfBot bot) {
+	public static Future<Message> embed(final Message message, final SelfBot bot) {
 		if (message.getContent().startsWith("/user")) {
-			EmbeddedMessage.userInfo(message, bot);
-			return;
+			return EmbeddedMessageUtil.userInfo(message, bot);
 		}
 		if (!message.getContent().startsWith("/embed")) {
-			return;
+			return null;
 		}
 
 		String msg = message.getContent().replace("/embed ", "");
 		message.delete();
-
+		
+		return embed(msg, bot, message.getChannelReceiver());
+	}
+	
+	public static Future<Message> embed(String msg, final SelfBot bot, final Channel channel) {
 		try {
 			final EmbedBuilder emb = new EmbedBuilder();
-			emb.setColor(new Color(EmbeddedMessage.rand.nextFloat(), EmbeddedMessage.rand.nextFloat(),
-					EmbeddedMessage.rand.nextFloat()).brighter());
+			emb.setColor(new Color(EmbeddedMessageUtil.rand.nextFloat(), EmbeddedMessageUtil.rand.nextFloat(),
+					EmbeddedMessageUtil.rand.nextFloat()).brighter());
 
 			emb.setFooter(
-					message.getAuthor().getName() + "'s Bot | Message sent "
+					bot.getAPI().getYourself().getName() + "'s Bot | Message sent "
 							+ new SimpleDateFormat("MM/dd HH:mm:ss").format(Calendar.getInstance().getTime()),
 					"https://avatars1.githubusercontent.com/u/6422482?v=3&s=400");
 
-			for (final String url : EmbeddedMessage.extractUrls(msg)) {
+			for (final String url : extractUrls(msg)) {
 				if (url.endsWith(".png") || url.endsWith(".jpeg") || url.endsWith(".jpg")) {
 					emb.setImage(url);
 					msg = msg.replace(url, "");
@@ -157,7 +126,7 @@ public class EmbeddedMessage {
 				msg = msg.replace("**" + title + "**", "");
 				emb.setTitle(title);
 			} else {
-				emb.setAuthor(message.getAuthor().getName() + " says:");
+				emb.setAuthor(bot.getAPI().getYourself().getName() + " says:");
 			}
 
 			if (msg.contains("--")) {
@@ -167,11 +136,11 @@ public class EmbeddedMessage {
 			}
 
 			emb.setDescription(msg);
-			message.reply("", emb);
+			return channel.sendMessage("", emb);
 		} catch (final Exception ex) {
 			ex.printStackTrace();
+			return null;
 		}
-
 	}
 
 }
