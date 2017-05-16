@@ -42,20 +42,23 @@ public class ICommandSelfBot {
 		case "/ban":
 			message.delete();
 			if (args.equals("")) {
-				EmbedBuilder emb = EmbeddedMessageUtil.getEmbeddedMessage("Usage Warning", "Invalid argument", "", "", "", Color.RED);
+				EmbedBuilder emb = EmbeddedMessageUtil.getEmbeddedMessage("Usage Warning", "Invalid argument", "", "",
+						"", Color.RED);
 				deleteMessageLater(message.reply("", emb), 2, TimeUnit.SECONDS);
 				break;
 			}
 			User user = Utils.getUser(args, message.getChannelReceiver().getServer(), bot);
 			if (user == null) {
-				EmbedBuilder emb = EmbeddedMessageUtil.getEmbeddedMessage("Usage Warning", "User not found", "", "", "", Color.RED);
+				EmbedBuilder emb = EmbeddedMessageUtil.getEmbeddedMessage("Usage Warning", "User not found", "", "", "",
+						Color.RED);
 				deleteMessageLater(message.reply("", emb), 2, TimeUnit.SECONDS);
 				break;
 			}
 			// Make sure we have permission to ban in this discord server
 			if (!Utils.hasPermission(bot.getAPI().getYourself(), message.getChannelReceiver().getServer(),
 					PermissionType.BAN_MEMBERS)) {
-				EmbedBuilder emb = EmbeddedMessageUtil.getEmbeddedMessage("Usage Warning", "You are not permitted to ban others!", "", "", "", Color.RED);
+				EmbedBuilder emb = EmbeddedMessageUtil.getEmbeddedMessage("Usage Warning",
+						"You are not permitted to ban others!", "", "", "", Color.RED);
 				deleteMessageLater(message.reply("", emb), 2, TimeUnit.SECONDS);
 				break;
 			}
@@ -66,7 +69,6 @@ public class ICommandSelfBot {
 					Color.YELLOW);
 			message.reply("", emb);
 			break;
-		case "/user":
 		case "/embed":
 			message.delete();
 			EmbeddedMessageUtil.embed(message, bot);

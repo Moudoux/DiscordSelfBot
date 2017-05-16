@@ -4,9 +4,9 @@ import static me.alexander.discordbot.SelfBot.Utils.extractUrls;
 import static me.alexander.discordbot.SelfBot.Utils.getUser;
 
 import java.awt.Color;
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Random;
 import java.util.concurrent.Future;
 
 import de.btobastian.javacord.entities.Channel;
@@ -17,13 +17,12 @@ import me.alexander.discordbot.SelfBot.SelfBot;
 
 public class EmbeddedMessageUtil {
 
-	private EmbeddedMessageUtil() {
-	}
+	private EmbeddedMessageUtil() {}
 
 	/**
 	 * Random to get random RGB values for the color
 	 */
-	private static Random rand = new Random();
+	private static SecureRandom rand = new SecureRandom();
 
 	/**
 	 * Builds an embedded message
@@ -97,7 +96,7 @@ public class EmbeddedMessageUtil {
 		}
 
 		String msg = message.getContent().replace("/embed ", "");
-	
+
 		return message.reply("", generateEmbed(msg, bot));
 	}
 
@@ -112,7 +111,7 @@ public class EmbeddedMessageUtil {
 	public static Future<Message> embed(String msg, final SelfBot bot, final Channel channel) {
 		return channel.sendMessage("", generateEmbed(msg, bot));
 	}
-	
+
 	public static EmbedBuilder generateEmbed(String msg, final SelfBot bot) {
 		try {
 			final EmbedBuilder emb = new EmbedBuilder();
