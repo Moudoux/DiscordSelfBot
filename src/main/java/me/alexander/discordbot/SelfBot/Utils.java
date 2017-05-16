@@ -10,6 +10,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.btobastian.javacord.entities.Channel;
 import de.btobastian.javacord.entities.Server;
 import de.btobastian.javacord.entities.User;
@@ -18,8 +21,6 @@ import de.btobastian.javacord.entities.permissions.PermissionState;
 import de.btobastian.javacord.entities.permissions.PermissionType;
 import de.btobastian.javacord.entities.permissions.Permissions;
 import de.btobastian.javacord.entities.permissions.Role;
-import me.alexander.discordbot.Logger.LogType;
-import me.alexander.discordbot.Main;
 
 /**
  * 
@@ -29,6 +30,8 @@ import me.alexander.discordbot.Main;
  *
  */
 public class Utils {
+	
+	private static final Logger logger = LoggerFactory.getLogger(Utils.class);
 
 	/**
 	 * Schedule executor service (used for self-delete)
@@ -151,7 +154,7 @@ public class Utils {
 			try {
 				message.get().delete();
 			} catch (InterruptedException | ExecutionException e) {
-				Main.getLogger().log(e.getMessage(), LogType.WARN);
+				logger.debug(e.getMessage());
 			}
 		}, time, unit);
 	}

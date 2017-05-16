@@ -56,7 +56,7 @@ public class EmbeddedMessageUtil {
 	 */
 	public static Future<Message> userInfo(final Message m, final SelfBot bot) {
 		m.delete();
-		
+
 		User user = getUser(m.getContent().replace("/user ", ""), bot);
 		if (user == null) {
 			user = bot.getAPI().getYourself();
@@ -97,12 +97,23 @@ public class EmbeddedMessageUtil {
 		}
 
 		String msg = message.getContent().replace("/embed ", "");
-		message.delete();
-		
-		return embed(msg, bot, message.getChannelReceiver());
+	
+		return message.reply("", generateEmbed(msg, bot));
+	}
+
+	/**
+	 * The /embed message interpreter
+	 * 
+	 * @param msg
+	 * @param bot
+	 * @param channel
+	 * @return
+	 */
+	public static Future<Message> embed(String msg, final SelfBot bot, final Channel channel) {
+		return channel.sendMessage("", generateEmbed(msg, bot));
 	}
 	
-	public static Future<Message> embed(String msg, final SelfBot bot, final Channel channel) {
+	public static EmbedBuilder generateEmbed(String msg, final SelfBot bot) {
 		try {
 			final EmbedBuilder emb = new EmbedBuilder();
 			emb.setColor(new Color(EmbeddedMessageUtil.rand.nextFloat(), EmbeddedMessageUtil.rand.nextFloat(),
@@ -136,7 +147,7 @@ public class EmbeddedMessageUtil {
 			}
 
 			emb.setDescription(msg);
-			return channel.sendMessage("", emb);
+			return emb;
 		} catch (final Exception ex) {
 			ex.printStackTrace();
 			return null;
