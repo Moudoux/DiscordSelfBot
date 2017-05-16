@@ -69,6 +69,7 @@ public class ICommandSelfBot {
 					Color.YELLOW);
 			message.reply("", emb);
 			break;
+		case "/user":
 		case "/embed":
 			message.delete();
 			EmbeddedMessageUtil.embed(message, bot);
